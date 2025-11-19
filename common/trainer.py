@@ -4,12 +4,13 @@ import torch.optim as optim
 from tqdm import tqdm
 from torch.utils.data import Dataset, DataLoader, random_split
 from torch.amp import autocast,GradScaler
+from pathlib import Path
 
 class Trainer:
     def __init__(self,args):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         print(f"Using device: {self.device}")
-        self.model_path = f"models/{args.task_name}.pt"
+        self.model_path = f"models/{args.file_name}.pt"
 
         self.epochs = args.epochs
         self.learning_rate = args.learning_rate
@@ -51,7 +52,13 @@ class Trainer:
             if avg_val_loss < best_val_loss:
                 best_val_loss = avg_val_loss
                 early_stopping_counter = 0
-                torch.save(self.model, self.model_path)
+                save_data = {
+                    'model': self.model,
+                    'model_type': self.args.model,
+                    'beset_val_loss': best_val_loss,
+                    'epoch': epoch
+                }
+                torch.save(save_data, self.model_path)
             else:
                 early_stopping_counter += 1
                 if early_stopping_counter > self.patience:

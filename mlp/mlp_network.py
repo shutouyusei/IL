@@ -32,7 +32,7 @@ class MlpNetwork(nn.Module):
             nn.Linear(128, action_output_dim*self.num_classes)
         )
 
-    def forward(self, state,image,env_state=None):
+    def forward(self, state,image):
         img_features = self.cnn_backbone(image)
         # (B, 512, 1, 1) -> (B, 512)
         img_features = torch.flatten(img_features, 1) 

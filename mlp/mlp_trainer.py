@@ -29,7 +29,7 @@ class MlpTrain(Trainer):
 
             self.optimizer.zero_grad(set_to_none=True)
             with autocast(device_type=self.device.type,enabled=(self.device.type == 'cuda')):
-                outputs = self.model(states,images,None)
+                outputs = self.model(states,images)
                 loss = self.criterion(outputs, actions)
             self.scaler.scale(loss).backward()
             self.scaler.step(self.optimizer)
@@ -51,7 +51,7 @@ class MlpTrain(Trainer):
                 actions = actions.to(self.device)
 
                 with autocast(device_type=self.device.type,enabled=(self.device.type == 'cuda')):
-                    outputs = self.model(states,images,None)
+                    outputs = self.model(states,images)
                     loss = self.criterion(outputs, actions)
 
                 val_loss += loss.item() * images.size(0)
