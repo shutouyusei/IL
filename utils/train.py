@@ -39,7 +39,7 @@ class Train:
             if avg_val_loss < best_val_loss:
                 best_val_loss = avg_val_loss
                 early_stopping_counter = 0
-                torch.save(self.model.state_dict(), self.model_path)
+                torch.save(self.model, self.model_path)
             else:
                 early_stopping_counter += 1
                 if early_stopping_counter > self.patience:

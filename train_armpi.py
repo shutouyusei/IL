@@ -1,11 +1,13 @@
+
 import torch
-from train.train import Train
+from utils.train import Train
 from networks.mlp_network import MlpNetwork
-from data_edit.ArmpiDataset import ArmpiDataset
+from armpi.ArmpiDataset import ArmpiDataset
 from torch.utils.data import Dataset, DataLoader, random_split
 
 VAL_SPLIT = 0.2
 BATCH_SIZE = 32
+FILE_NAME = "model"
 
 if __name__ == '__main__':
     read_data_list = ["bring_up_red"]
@@ -20,5 +22,5 @@ if __name__ == '__main__':
 
     model = MlpNetwork(state_input_dim=len(full_dataset.state_columns), action_output_dim=len(full_dataset.action_columns))
 
-    trainer = Train(train_loader,val_loader,model,"model/result/model.pt",epochs=10)
+    trainer = Train(train_loader,val_loader,model,f"models/{FILE_NAME}.pt",epochs=10)
     trainer.train()

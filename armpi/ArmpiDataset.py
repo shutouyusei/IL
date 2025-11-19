@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset
 import torchvision.transforms as T
-from read_hdf import ReadHDF
+from utils.read_hdf import ReadHDF
 
 
 class ArmpiDataset(Dataset):
