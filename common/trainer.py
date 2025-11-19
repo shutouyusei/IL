@@ -8,6 +8,7 @@ from pathlib import Path
 
 class Trainer:
     def __init__(self,args):
+        self.args = args
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         print(f"Using device: {self.device}")
         self.model_path = f"models/{args.file_name}.pt"
