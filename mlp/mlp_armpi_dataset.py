@@ -7,10 +7,10 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset
 import torchvision.transforms as T
-from utils.read_hdf import ReadHDF
+from common.read_hdf import ReadHDF
 
 
-class ArmpiDataset(Dataset):
+class MlpArmpiDataset(Dataset):
     def __init__(self, data_directory_list):
         all_sync_data = self.__read_file(data_directory_list)
         print(f"{len(all_sync_data)} files are read")
