@@ -24,6 +24,6 @@ class ActModel(BaseModel):
             predict_labels = torch.argmax(logits_per_action,dim=1)
             
             predict_labels = predict_labels - 1
-            predict_labels.cpu().numpy()
+            predict_labels = predict_labels.cpu().numpy()
             predicted_actions = predict_labels.astype(np.int8)
             return predicted_actions
