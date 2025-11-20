@@ -25,4 +25,4 @@ class ActModel(BaseModel):
             
             predict_labels = predict_labels - 1
             predict_labels.cpu().numpy()
-            return predict_labels 
+            return predict_labels.astype(np.int8)
