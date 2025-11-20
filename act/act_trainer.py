@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from common.trainer import Trainer
-from .act import build_ACT 
+from .act_network import build_ACT 
 from .act_armpi_dataset import ActArmpiDataset
 from torch.utils.data import Dataset, DataLoader, random_split
 from torch.amp import autocast,GradScaler

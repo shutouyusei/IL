@@ -54,7 +54,7 @@ class Trainer:
                 best_val_loss = avg_val_loss
                 early_stopping_counter = 0
                 save_data = {
-                    'model': self.model,
+                    'model_state_dict': self.model.state_dict(),
                     'model_type': self.args.model,
                     'beset_val_loss': best_val_loss,
                     'epoch': epoch

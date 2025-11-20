@@ -1,8 +1,9 @@
+import torch
+import torch.nn as nn
 from third_party.act.detr.models import build_ACT_model
 from third_party.act.detr.models.detr_vae import DETRVAE
 from types import SimpleNamespace
 import torch
-import torch.nn as nn
 
 def build_ACT(state_dim,action_dim):
     args = SimpleNamespace(
