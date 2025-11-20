@@ -1,5 +1,7 @@
-from .base_model import BaseModel 
+from common.base_model import BaseModel 
+from .mlp_network import MlpNetwork
 import torch
+from common.armpi_const import *
 
 class MlpModel(BaseModel):
     def predict(self, image_tensor, state_tensor):

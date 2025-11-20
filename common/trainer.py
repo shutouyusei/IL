@@ -11,7 +11,9 @@ class Trainer:
         self.args = args
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         print(f"Using device: {self.device}")
-        self.model_path = f"models/{args.file_name}.pt"
+        self.model_path = f"models/{args.file_name}"
+        p = Path(self.model_path)
+        p.mkdir(parents=True,exist_ok=True)
 
         self.epochs = args.epochs
         self.learning_rate = args.learning_rate
@@ -41,6 +43,10 @@ class Trainer:
         early_stopping_counter = 0
 
         print("--- Training Start ---")
+        config_data = {
+            'model_type': self.args.model,
+        }
+        torch.save(config_data,f"{self.model_path}/config.pt")
         epoch_pbar = tqdm(range(self.epochs), desc="Epochs")
         for epoch in epoch_pbar:
             train_loss = self._train()
@@ -54,12 +60,11 @@ class Trainer:
                 best_val_loss = avg_val_loss
                 early_stopping_counter = 0
                 save_data = {
-                    'model_state_dict': self.model.state_dict(),
-                    'model_type': self.args.model,
+                    'model': self.model,
                     'beset_val_loss': best_val_loss,
-                    'epoch': epoch
+                    'epoch': epoch,
                 }
-                torch.save(save_data, self.model_path)
+                torch.save(save_data, f"{self.model_path}/model.pt")
             else:
                 early_stopping_counter += 1
                 if early_stopping_counter > self.patience:

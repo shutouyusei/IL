@@ -2,12 +2,12 @@ import torch
 import numpy as np
 
 class BaseModel:
-    def __init__(self, device,model_state_dict):
+    def __init__(self, model_path,device):
         self.device = device
-        self.model = self.__load_model(model_state_dict)
-
-    def __load_model(sefl.model_state_dict):
-        raise NotImplementedError
+        model_data = torch.load(f"{model_path}/model.pt",map_location=self.device,weights_only=False)
+        self.model = model_data['model']
+        self.model.to(device)
+        self.model.eval()
 
     def predict(self, image_tensor, state_tensor):
         raise NotImplementedError

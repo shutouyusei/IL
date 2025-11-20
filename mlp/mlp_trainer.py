@@ -7,6 +7,7 @@ from .mlp_network import MlpNetwork
 from .mlp_armpi_dataset import MlpArmpiDataset
 from common.trainer import Trainer
 from torch.utils.data import Dataset, DataLoader, random_split
+from common.armpi_const import *
 
 class MlpTrain(Trainer):
     def __init__(self,args):
@@ -14,7 +15,7 @@ class MlpTrain(Trainer):
 
     def set_up(self,task_name):
         full_dataset = MlpArmpiDataset([task_name])
-        self.model = MlpNetwork(state_input_dim=len(full_dataset.state_columns), action_output_dim=len(full_dataset.action_columns))
+        self.model = MlpNetwork(state_input_dim=len(STATES_COLUMNS), action_output_dim=len(ACTION_COLUMNS))
         self.scaler = GradScaler(enabled= (self.device.type == 'cuda'))
         return full_dataset 
 

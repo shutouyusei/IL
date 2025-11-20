@@ -5,6 +5,7 @@ import torch
 from torch.utils.data import Dataset
 import torchvision.transforms as T
 from common.read_hdf import ReadHDF
+from common.armpi_const import *
 
 class ActArmpiDataset(Dataset):
     def __init__(self, data_directory_list, num_queries=100):
@@ -16,15 +17,6 @@ class ActArmpiDataset(Dataset):
         """
         self.num_queries = num_queries
         self.image_dataset_key = "images/data"
-        
-        self.action_columns = [
-            "chassis_move_forward", "chassis_move_right", "angular_right",
-            "arm_x", "arm_y", "arm_z", "arm_alpha", "rotation", "gripper_close"
-        ]
-        self.state_columns = [
-            "joint1_pos", "joint2_pos", "joint3_pos", "joint4_pos",
-            "joint5_pos", "r_joint_pos"
-        ]
 
         self.transform = T.Compose([
             T.ToPILImage(),
@@ -43,7 +35,7 @@ class ActArmpiDataset(Dataset):
         for ep_idx, df in enumerate(self.episodes):
             total_original_rows += len(df)
             
-            action_sum = df[self.action_columns].abs().sum(axis=1)
+            action_sum = df[ACTION_COLUMNS].abs().sum(axis=1)
             valid_indices = np.where(action_sum > 0)[0].tolist()
             
             # 有効な行のみを学習データとして登録
@@ -77,7 +69,7 @@ class ActArmpiDataset(Dataset):
         current_row = episode_df.iloc[start_row_idx]
         
         # --- State Data (qpos) ---
-        state_values = current_row[self.state_columns].values.astype(np.float32)
+        state_values = current_row[STATES_COLUMNS].values.astype(np.float32)
         qpos_tensor = torch.tensor(state_values, dtype=torch.float32)
 
         # --- Image Data ---
@@ -100,7 +92,7 @@ class ActArmpiDataset(Dataset):
         end_row_idx = min(start_row_idx + self.num_queries, max_len)
         
         # スライスで取得
-        action_chunk_df = episode_df.iloc[start_row_idx : end_row_idx][self.action_columns]
+        action_chunk_df = episode_df.iloc[start_row_idx : end_row_idx][ACTION_COLUMNS]
         action_values = action_chunk_df.values.astype(np.float32)
         
         # パディング処理

@@ -7,6 +7,7 @@ from .act_armpi_dataset import ActArmpiDataset
 from torch.utils.data import Dataset, DataLoader, random_split
 from torch.amp import autocast,GradScaler
 from tqdm import tqdm
+from common.armpi_const import *
 
 class ActTrainer(Trainer):
     def __init__(self,args):
@@ -15,7 +16,7 @@ class ActTrainer(Trainer):
     def set_up(self,task_name):
         full_dataset = ActArmpiDataset([task_name])
 
-        self.model = build_ACT(state_dim=len(full_dataset.state_columns),action_dim=len(full_dataset.action_columns))
+        self.model = build_ACT(state_dim=len(STATES_COLUMNS),action_dim=len(ACTION_COLUMNS))
         return full_dataset
 
     def _train(self):
