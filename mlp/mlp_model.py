@@ -2,6 +2,7 @@ from common.base_model import BaseModel
 from .mlp_network import MlpNetwork
 import torch
 from common.armpi_const import *
+import numpy as np
 
 class MlpModel(BaseModel):
     def predict(self, image_tensor, state_tensor):
