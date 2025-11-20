@@ -14,4 +14,5 @@ class MlpModel(BaseModel):
             
             predicted_indicies = torch.argmax(logits, dim=1)
             predicted_actions = (predicted_indicies - 1).cpu().numpy().squeeze()
-            return predicted_actions.astype(np.int8)
+            predicted_actions = predicted_actions.astype(np.int8)
+            return predicted_actions
