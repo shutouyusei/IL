@@ -8,6 +8,7 @@ from torch.utils.data import Dataset, DataLoader, random_split
 from torch.amp import autocast,GradScaler
 from tqdm import tqdm
 from common.armpi_const import *
+from torch.nn import functional as F
 
 class ActTrainer(Trainer):
     def __init__(self,args):
@@ -16,7 +17,7 @@ class ActTrainer(Trainer):
     def set_up(self,task_name):
         full_dataset = ActArmpiDataset([task_name])
 
-        self.model = build_ACT(state_dim=len(STATES_COLUMNS),action_dim=len(ACTION_COLUMNS))
+        self.model = build_ACT(state_dim=len(STATES_COLUMNS),action_dim=len(ACTION_COLUMNS*3))
         return full_dataset
 
     def _train(self):
@@ -27,20 +28,24 @@ class ActTrainer(Trainer):
             images = images.to(self.device)
             states = states.to(self.device)
             actions = actions.to(self.device)
+            actions = F.one_hot(actions, num_classes=3).flatten(start_dim=2).float()
             is_pad =  is_pad.to(self.device)
             if images.dim() == 4 and images.shape[1] == 1:
                 images = images.repeat(1, 3, 1, 1)
                         
             if images.dim() == 4:
                 images = images.unsqueeze(1)
+
             self.optimizer.zero_grad()
             a_hat,is_pad_hat, (mu,logvar) = self.model(states,images,None,actions,is_pad)
+            a_hat = a_hat.flatten(0,1)
+            actions = actions.flatten(0,1)
             l1_loss = self.criterion(a_hat, actions)
                 
             total_kld = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
             loss_kld = total_kld / images.shape[0] # バッチサイズで割る
             
-            kl_weight = getattr(self, 'kl_weight', 10.0) 
+            kl_weight = getattr(self, 'kl_weight', 1e-5) 
             loss = l1_loss + (kl_weight * loss_kld)
             loss.backward()
             torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=10.0)
@@ -60,6 +65,7 @@ class ActTrainer(Trainer):
                 images = images.to(self.device)
                 states = states.to(self.device)
                 actions = actions.to(self.device)
+                actions = F.one_hot(actions, num_classes=3).flatten(start_dim=2).float()
                 is_pad =  is_pad.to(self.device)
 
                 if images.dim() == 4 and images.shape[1] == 1:
@@ -68,12 +74,14 @@ class ActTrainer(Trainer):
                 if images.dim() == 4:
                     images = images.unsqueeze(1)
                 a_hat,is_pad_hat, (mu,logvar) = self.model(states,images,None,actions,is_pad)
+                a_hat = a_hat.flatten(0,1)
+                actions = actions.flatten(0,1)
                 l1_loss = self.criterion(a_hat, actions)
                     
                 total_kld = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
                 loss_kld = total_kld / images.shape[0] # バッチサイズで割る
                     
-                kl_weight = getattr(self, 'kl_weight', 10.0) 
+                kl_weight = getattr(self, 'kl_weight', 1e-5) 
                 loss = l1_loss + (kl_weight * loss_kld)
 
                 val_loss += loss.item() * images.size(0)

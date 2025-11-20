@@ -26,10 +26,6 @@ if __name__ == '__main__':
     # 3. 推論の実行
     output_actions = model_history.predict(dummy_image, dummy_state)
     
-    # 4. 結果の確認
-    print("\n--- 推論結果の確認 ---")
-    print(f"予測アクション出力シェイプ: {output_actions.shape}")
-    
     expected_shape = torch.Size([9])
     
     if output_actions.shape == expected_shape:
@@ -37,20 +33,12 @@ if __name__ == '__main__':
     else:
         print(f"❌ 出力シェイプが期待値 ({expected_shape}) と異なります。")
     
-    print(f"出力データ型: {output_actions.dtype}")
+    print(output_actions)
 
     # -----
     model_history = model_load('models/act',device)
 
-    dummy_image = torch.randn(3, 224, 224)  # [C, H, W]
-    dummy_state = torch.randn(6)          # [D_STATE]
-    
-    # 3. 推論の実行
     output_actions = model_history.predict(dummy_image, dummy_state)
-    
-    # 4. 結果の確認
-    print("\n--- 推論結果の確認 ---")
-    print(f"予測アクション出力シェイプ: {output_actions.shape}")
     
     expected_shape = torch.Size([9])
     
@@ -59,4 +47,4 @@ if __name__ == '__main__':
     else:
         print(f"❌ 出力シェイプが期待値 ({expected_shape}) と異なります。")
     
-    print(f"出力データ型: {output_actions.dtype}")
+    print(output_actions)
