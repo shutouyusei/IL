@@ -1,3 +1,6 @@
 [submodule "third_party/act"]
 	path = third_party/act
 	url = git@github.com:shutouyusei/act.git
+[submodule "third_party/diffusion"]
+	path = third_party/diffusion
+	url = git@github.com:shutouyusei/diffusion_policy.git
