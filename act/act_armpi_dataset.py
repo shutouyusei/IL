@@ -117,26 +117,3 @@ class ActArmpiDataset(Dataset):
         
         # 戻り値: image, qpos, actions (chunk), is_pad
         return image_tensor, qpos_tensor, actions_tensor, is_pad_tensor
-
-
-if __name__ == "__main__":
-    print("TEST ActArmpiDataset")
-    # 例として num_queries=100 でテスト
-    dataset = ActArmpiDataset(["bring_up_red"], num_queries=100)
-    
-    if len(dataset) > 0:
-        img, qpos, actions, is_pad = dataset[0]
-        print(f"Image shape: {img.shape}")       # [3, 224, 224]
-        print(f"Qpos shape: {qpos.shape}")       # [6]
-        print(f"Actions shape: {actions.shape}") # [100, 9] (Seq_Len, Action_Dim)
-        print(f"Is_pad shape: {is_pad.shape}")   # [100]
-        
-        # 連続値 (float32) になっているか確認
-        if actions.dtype == torch.float32:
-            print("✅ Actions dtype is FLOAT32 (Correct for Regression)")
-        else:
-            print(f"❌ Actions dtype is {actions.dtype} (Expected float32)")
-            
-        print("Test Passed!")
-    else:
-        print("No data found.")

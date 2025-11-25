@@ -3,7 +3,7 @@ def argument_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--file_name', action='store', type=str, help='File name', required=True)
     parser.add_argument('--task_name', action='store', type=str, help='Task name', required=True)
-    parser.add_argument('--model', type=str,choices=['mlp','act'], help='choose model', required=True)
+    parser.add_argument('--model', type=str,choices=['mlp','act','diffusion'], help='choose model', required=True)
     parser.add_argument('--batch_size',type=int, help='Batch size', required=False,default=32)
     parser.add_argument('--val_split',type=float, help='Val split', required=False,default=0.2)
     parser.add_argument('--epochs',type=int,help='num of epochs',required=False,default=10)
@@ -22,6 +22,8 @@ if __name__ == '__main__':
     elif args.model == 'act':
         from act.act_trainer import ActTrainer
         trainer = ActTrainer(args)
+    elif args.model == 'diffusion':
+        from diffusion.diffusion_trainer import DiffusionTrainer
+        trainer = DiffusionTrainer(args)
 
     trainer.train()
-
