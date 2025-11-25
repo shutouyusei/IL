@@ -9,7 +9,7 @@ if PROJECT_ROOT not in sys.path:
 ACT_ROOT_DIR = os.path.join(PROJECT_ROOT, 'third_party', 'act','detr')
 if ACT_ROOT_DIR not in sys.path:
     sys.path.append(ACT_ROOT_DIR)
-DIFFUSION_ROOT_DIR = os.path.join(PROJECT_ROOT, 'third_party', 'diffusion','diffusion_policy')
+DIFFUSION_ROOT_DIR = os.path.join(PROJECT_ROOT, 'third_party', 'diffusion')
 if DIFFUSION_ROOT_DIR not in sys.path:
     sys.path.append(DIFFUSION_ROOT_DIR)
 
