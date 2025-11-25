@@ -24,10 +24,6 @@ import numpy as np
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
 from diffusers.schedulers.scheduling_ddim import DDIMScheduler
 
-from diffusion_policy.policy.diffusion_unet_hybrid_image_policy import DiffusionUnetHybridImagePolicy
-from diffusion_policy.policy.diffusion_transformer_hybrid_image_policy import DiffusionTransformerHybridImagePolicy
-from diffusion_policy.common.pytorch_util import dict_apply
-
 class DiffusionModel(BaseModel):
     def predict(self, image_tensor, state_tensor):
         with torch.no_grad():

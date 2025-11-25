@@ -1,6 +1,5 @@
 from common.base_model import BaseModel 
 import torch
-from third_party.act.detr.models.detr_vae import DETRVAE
 import numpy as np
 
 class ActModel(BaseModel):

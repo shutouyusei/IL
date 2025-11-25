@@ -6,10 +6,6 @@ PROJECT_ROOT = os.path.dirname(CURRENT_FILE_PATH)
 if PROJECT_ROOT not in sys.path:
     sys.path.append(PROJECT_ROOT)
 
-ACT_ROOT_DIR = os.path.join(PROJECT_ROOT, 'third_party', 'act','detr')
-if ACT_ROOT_DIR not in sys.path:
-    sys.path.append(ACT_ROOT_DIR)
-
 from act.act_model import ActModel
 from mlp.mlp_model import MlpModel
 from diffusion.diffusion_model import DiffusionModel
