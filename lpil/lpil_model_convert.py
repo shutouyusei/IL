@@ -7,6 +7,7 @@ import os
 import torch
 import argparse
 from pathlib import Path
+import dataclasses
 
 def get_parser():
     parser = argparse.ArgumentParser(description="Train a workspace model",formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -27,7 +28,6 @@ if __name__ == "__main__":
         model_name = config['model_name']
         model_config = BuildModelConfig(**config['model_config'])
         workspace_config = WorkSpaceConfig(**config['workspace_config'])
-        train_config = TrainConfig(**config['train_config'])
     else:
         raise Exception("Config file not found. Please run train first.")
 
@@ -36,7 +36,13 @@ if __name__ == "__main__":
     model = model_load(workspace_name=workspace_name,model_name=model_name,workspace_config=workspace_config,model_config=model_config,checkpoint_path=checkpoint_path)
 
     Path(f"models/{args.folder_name}").mkdir(parents=True, exist_ok=True)
-    config_data = { 'model_type': "lpil"}
+    config_data = { 
+        'model_type': "lpil",
+        'workspace_name': workspace_name,
+        'model_name': model_name,
+        'model_config': dataclasses.asdict(model_config),
+        'workspace_config': dataclasses.asdict(workspace_config),
+    }
     torch.save(config_data,f"models/{args.folder_name}/config.pt")
-    save_data = { 'model': model }
+    save_data = { 'model_state_dict': model.state_dict() }
     torch.save(save_data, f"models/{args.folder_name}/model.pt")
