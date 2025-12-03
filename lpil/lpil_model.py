@@ -1,5 +1,6 @@
 from common.base_model import BaseModel 
 import torch
+import torch._dynamo
 import numpy as np
 from collections import deque
 from LPIL.bin.model_load import model_load
@@ -11,7 +12,7 @@ import os
 class LpilModel(BaseModel):
     def __init__(self,model_path,device):
         super().__init__(model_path,device)
-        torch.set_float32_matmul_precision('high')
+        torch._dynamo.config.suppress_errors = True
         self.seq_len = self.model.seq_len
         self.action_dim = 9
         self.reset()
