@@ -16,6 +16,7 @@ if DIFFUSION_ROOT_DIR not in sys.path:
 from act.act_model import ActModel
 from mlp.mlp_model import MlpModel
 from diffusion.diffusion_model import DiffusionModel
+from lpil.lpil_model import LpilModel
 
 def model_load(model_path,device):
     try:
@@ -26,6 +27,8 @@ def model_load(model_path,device):
             model_strategy = ActModel(model_path,device)
         elif dict_data["model_type"]== "diffusion":
             model_strategy = DiffusionModel(model_path,device)
+        elif dict_data["model_type"]== "lpil":
+            model_strategy = LpilModel(model_path,device)
         else:
             raise ValueError(f"Unknown model type: {model_type}")
         return model_strategy
@@ -67,6 +70,19 @@ if __name__ == '__main__':
     print(output_actions)
 
     model_history = model_load('models/diffusion',device)
+
+    output_actions = model_history.predict(dummy_image, dummy_state)
+    
+    expected_shape = torch.Size([9])
+    
+    if output_actions.shape == expected_shape:
+        print("✅ 出力シェイプはArmPiアクション次元 (9次元) と一致しています。")
+    else:
+        print(f"❌ 出力シェイプが期待値 ({expected_shape}) と異なります。")
+    
+    print(output_actions)
+
+    model_history = model_load('models/lpil',device)
 
     output_actions = model_history.predict(dummy_image, dummy_state)
     

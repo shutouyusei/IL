@@ -4,3 +4,6 @@
 [submodule "third_party/diffusion"]
 	path = third_party/diffusion
 	url = git@github.com:shutouyusei/diffusion_policy.git
+[submodule "third_party/LPIL"]
+	path = third_party/LPIL
+	url = git@github.com:shutouyusei/LPIL.git
