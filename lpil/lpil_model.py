@@ -11,7 +11,6 @@ import os
 class LpilModel(BaseModel):
     def __init__(self,model_path,device):
         super().__init__(model_path,device)
-        torch.compile(self.model)
         torch.set_float32_matmul_precision('high')
         self.seq_len = self.model.seq_len
         self.action_dim = 9
