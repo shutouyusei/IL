@@ -27,13 +27,13 @@ if __name__ == "__main__":
         workspace_name = config['workspace_name']
         model_name = config['model_name']
         model_config = BuildModelConfig(**config['model_config'])
+        model_config.checkpoint_path = os.path.join("results", args.save_folder_name, args.checkpoint_name)
         workspace_config = WorkSpaceConfig(**config['workspace_config'])
     else:
         raise Exception("Config file not found. Please run train first.")
 
     # =========================
-    checkpoint_path = os.path.join("results",args.save_folder_name,args.checkpoint_name)
-    model = model_load(workspace_name=workspace_name,model_name=model_name,workspace_config=workspace_config,model_config=model_config,checkpoint_path=checkpoint_path)
+    model = model_load(workspace_name=workspace_name,model_name=model_name,workspace_config=workspace_config,model_config=model_config)
 
     Path(f"models/{args.folder_name}").mkdir(parents=True, exist_ok=True)
     config_data = { 

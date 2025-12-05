@@ -82,7 +82,7 @@ if __name__ == '__main__':
     
     print(output_actions)
 
-    model_history = model_load('models/lpil',device)
+    model_history = model_load('models/lpil_bring_up_red',device)
 
     output_actions = model_history.predict(dummy_image, dummy_state)
     

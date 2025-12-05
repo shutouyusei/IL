@@ -13,7 +13,7 @@ class LpilModel(BaseModel):
     def __init__(self,model_path,device):
         super().__init__(model_path,device)
         torch._dynamo.config.suppress_errors = True
-        self.seq_len = self.model.seq_len
+        self.seq_len = 10
         self.action_dim = 9
         self.reset()
 
@@ -27,7 +27,8 @@ class LpilModel(BaseModel):
         else:
             raise Exception("Config file not found. Please run train first.")
         checkpoint_path = os.path.join(model_path,"model.pt")
-        self.model = model_load(workspace_name=workspace_name,model_name=model_name,workspace_config=workspace_config,model_config=model_config,checkpoint_path=checkpoint_path)
+        model_config.checkpoint_path = checkpoint_path
+        self.model = model_load(workspace_name=workspace_name,model_name=model_name,workspace_config=workspace_config,model_config=model_config)
         self.model.to(device)
         self.model.eval()
 
@@ -54,8 +55,7 @@ class LpilModel(BaseModel):
             past_jnts = torch.cat(list(self.jnt_buffer), dim=0).unsqueeze(0)
             past_acts = torch.cat(list(self.act_buffer), dim=0).unsqueeze(0)
 
-            # BehaviorCloning.forward(past_imgs, past_jnts, past_acts, curr_img, curr_jnt)
-            pred_action, _, _ = self.model(
+            _, _, pred_action,_= self.model(
                 past_imgs, 
                 past_jnts, 
                 past_acts, 
