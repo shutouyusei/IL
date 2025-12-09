@@ -11,7 +11,7 @@ import os
 
 class LpilModel(BaseModel):
     def __init__(self, model_path, device,task_path):
-        super().__init__(model_path, device)
+        super().__init__(model_path, device,task_path)
         torch._dynamo.config.suppress_errors = True
         torch.set_float32_matmul_precision('high')
 
