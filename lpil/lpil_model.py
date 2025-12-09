@@ -15,10 +15,9 @@ class LpilModel(BaseModel):
         torch._dynamo.config.suppress_errors = True
         torch.set_float32_matmul_precision('high')
 
-    def model_load(self, model_path, device):
-        foundation_model_path = "models/lpil_foundation"
-        if os.path.exists(os.path.join(foundation_model_path, "config.pt")):
-            config = torch.load(os.path.join(foundation_model_path, "config.pt"), weights_only=False)
+    def model_load(self, model_path, device,task_name):
+        if os.path.exists(os.path.join(model_path, "config.pt")):
+            config = torch.load(os.path.join(model_path, "config.pt"), weights_only=False)
             workspace_name = config['workspace_name']
             model_name = config['model_name']
             model_config = BuildModelConfig(**config['model_config'])
@@ -26,10 +25,10 @@ class LpilModel(BaseModel):
         else:
             raise Exception("Config file not found. Please run train first.")
 
-        checkpoint_path = os.path.join(foundation_model_path, "model.pt")
+        checkpoint_path = os.path.join(model_path, "model.pt")
         model_config.checkpoint_path = checkpoint_path
 
-        task_path = f"{model_path}/goal_latent.pth"
+        task_path = f"{task_name}/goal_latent.pth"
         # Rollout (モデルを含むラッパー) の初期化
         self.roll_out = Rollout(
             workspace_name=workspace_name,

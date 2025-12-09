@@ -18,7 +18,7 @@ from mlp.mlp_model import MlpModel
 from diffusion.diffusion_model import DiffusionModel
 from lpil.lpil_model import LpilModel
 
-def model_load(model_path,device):
+def model_load(model_path,device,task_name=None):
     try:
         dict_data = torch.load(f"{model_path}/config.pt", map_location=device)
         if dict_data["model_type"] == "mlp":
@@ -28,7 +28,7 @@ def model_load(model_path,device):
         elif dict_data["model_type"]== "diffusion":
             model_strategy = DiffusionModel(model_path,device)
         elif dict_data["model_type"]== "lpil":
-            model_strategy = LpilModel(model_path,device)
+            model_strategy = LpilModel(model_path,device,task_name)
         else:
             raise ValueError(f"Unknown model type: {model_type}")
         return model_strategy
