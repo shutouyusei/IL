@@ -10,12 +10,12 @@ from LPIL.workspace.base.base_workspace import WorkSpaceConfig
 import os
 
 class LpilModel(BaseModel):
-    def __init__(self, model_path, device):
+    def __init__(self, model_path, device,task_path):
         super().__init__(model_path, device)
         torch._dynamo.config.suppress_errors = True
         torch.set_float32_matmul_precision('high')
 
-    def model_load(self, model_path, device,task_name):
+    def model_load(self, model_path, device,task_path):
         if os.path.exists(os.path.join(model_path, "config.pt")):
             config = torch.load(os.path.join(model_path, "config.pt"), weights_only=False)
             workspace_name = config['workspace_name']
@@ -28,7 +28,7 @@ class LpilModel(BaseModel):
         checkpoint_path = os.path.join(model_path, "model.pt")
         model_config.checkpoint_path = checkpoint_path
 
-        task_path = f"{task_name}/goal_latent.pth"
+        task_path = f"{task_path}/goal_latent.pth"
         # Rollout (モデルを含むラッパー) の初期化
         self.roll_out = Rollout(
             workspace_name=workspace_name,
