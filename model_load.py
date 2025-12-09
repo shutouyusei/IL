@@ -18,7 +18,7 @@ from mlp.mlp_model import MlpModel
 from diffusion.diffusion_model import DiffusionModel
 from lpil.lpil_model import LpilModel
 
-def model_load(model_path,device,taks_path=None):
+def model_load(model_path,device,task_path=None):
     try:
         dict_data = torch.load(f"{model_path}/config.pt", map_location=device)
         if dict_data["model_type"] == "mlp":
