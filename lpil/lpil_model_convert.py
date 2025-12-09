@@ -11,7 +11,6 @@ import dataclasses
 
 def get_parser():
     parser = argparse.ArgumentParser(description="Train a workspace model",formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("folder_name")
     parser.add_argument('save_folder_name',type=str,help='Path to the save folder')
     parser.add_argument('checkpoint_name',type=str,help='Path to the checkpoint')
     return parser
@@ -35,7 +34,7 @@ if __name__ == "__main__":
     # =========================
     model = model_load(workspace_name=workspace_name,model_name=model_name,workspace_config=workspace_config,model_config=model_config)
 
-    Path(f"models/{args.folder_name}").mkdir(parents=True, exist_ok=True)
+    Path(f"models/lpil_foundation").mkdir(parents=True, exist_ok=True)
     config_data = { 
         'model_type': "lpil",
         'workspace_name': workspace_name,
@@ -43,6 +42,6 @@ if __name__ == "__main__":
         'model_config': dataclasses.asdict(model_config),
         'workspace_config': dataclasses.asdict(workspace_config),
     }
-    torch.save(config_data,f"models/{args.folder_name}/config.pt")
+    torch.save(config_data,f"models/lpil_foundation/config.pt")
     save_data = { 'model_state_dict': model.state_dict() }
-    torch.save(save_data, f"models/{args.folder_name}/model.pt")
+    torch.save(save_data, f"models/lpil_foundation/model.pt")
