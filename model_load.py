@@ -30,7 +30,7 @@ def model_load(model_path,device,task_path=None):
         elif dict_data["model_type"]== "lpil":
             model_strategy = LpilModel(model_path,device,task_path)
         else:
-            raise ValueError(f"Unknown model type: {model_type}")
+            raise ValueError(f"Unknown model type: {dict_data['model_type']}")
         return model_strategy
     except Exception as e:
         print(f"Error loading model: {e}")
